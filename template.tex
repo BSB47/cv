@@ -1,0 +1,218 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 79, 144} % define primary color
+\usepackage{enumitem} % for customizing lists
+% \usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+    pdftitle={John Doe's CV},
+    pdfauthor={John Doe},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    % \usepackage[T1]{fontenc} % this breaks sb2nov
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+
+
+% Some settings:
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0cm} % set column seperation
+\makeatletter
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\circ$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.4 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0.2 cm + 0.00001 cm
+    }{
+        0.2 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{}
+
+    \placelastupdatedtext
+    \begin{header}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Frank Fu}
+
+        \vspace{0.05 cm}
+
+        \normalsize
+        \mbox{{y.f.fu@uq.edu.au}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \AND%
+        \mbox{{github.com/BSB47}}%
+    \end{header}
+
+    \vspace{0.1 cm}
+
+
+    \section{Education}
+
+        \begin{onecolentry}
+          \textbf{Ph.D. Computational Chemistry} -- The University of Queensland \hfill Jul 2023 - Present\\
+          \textbf{MSc. Biological Sciences} -- The University of Auckland \hfill Mar 2023\\
+          \textbf{BSc. Biological Sciences} -- The University of Auckland \hfill Mar 2021
+        \end{onecolentry}
+    
+    \section{Experience}
+
+    \begin{onecolentry}
+      \textbullet{} \textbf{Research Intern} QDX, Melbourne \hfill Feb - Jun 2025
+        \begin{highlightsforbulletentries}
+            \begin{highlightsforbulletentries}
+              \item Implemented novel machine learning framework (Python, C++) for automatic recognition and deployment of collective variables in proprietary molecular dynamics suite
+              \item 400\% speedup compared to tradition workflows, requiring minimal prior knowledge of the system under study
+            \end{highlightsforbulletentries}
+
+        \end{highlightsforbulletentries}
+    \end{onecolentry}
+    \begin{onecolentry}
+      \textbullet{} \textbf{Lab Demonstrator} The University of Auckland \hfill Mar 2021 - May 2023
+      \begin{highlightsforbulletentries}
+          \begin{highlightsforbulletentries}
+          \item \textit{BIOSCI 107: Biology for Biomedical Science} -- microbiology lab techniques such as culturing, microscopy, and gel electrophoresis
+          \item \textit{BIOSCI 220: Quantitative Biology} -- statistical modelling/analysis using the R programming language
+          \item \textit{BIOSCI 355: Genomics} -- bioinformatics techniques such as sequence alignment, structure prediction, and phylogenetics
+          \end{highlightsforbulletentries}
+    \end{highlightsforbulletentries}
+    \end{onecolentry}
+    \begin{onecolentry}
+      \textbullet{} \textbf{Research Assistant} The University of Auckland \hfill Dec 2021 - Mar 2022
+      \begin{highlightsforbulletentries}
+          \begin{highlightsforbulletentries}
+          \item Performed experimental evolution of genetically modified \textit{S. cerevisiae} to observe evolutionary dynamics between competing populations
+          \item Experiment results were used to contribute to a successful grant application
+          \end{highlightsforbulletentries}
+      \end{highlightsforbulletentries}
+
+    
+    \section{Skills}
+    \textbf{Programming} C/C++, Python, R\\
+    \textbf{Machine learning} Supervised learning with PyTorch/libtorch, scikit-learn, DGL\\
+    \textbf{Molecular dynamics} \textit{classical}: GROMACS, PLUMED, OpenMM \textbar{} \textit{quantum}: xTB
+
+    
+    \section{Publications}
+    \begin{onecolentry}
+    \textbullet{} Fu, Y., \& Takeuchi, N. (2024). Evolution of the division of labour between templates and catalysts in spatial replicator models. \textit{Journal of Evolutionary Biology, 37(10}}, 1158-1169.\\
+    \textbullet{} Fu, Y., Stroet, M., \& O'Mara, M. L. (2025). A graph-based machine learning framework to assign empirical interaction parameters for novel molecules. In review.
+    \end{onecolentry}
+
+    \section{Awards}
+    The University of Queensland Industry Placement Scholarship \hfill 2025\\
+    The University of Queensland Earmarked PhD Scholarship \hfill 2023\\
+    Best Poster, The Association of Molecular Modellers of Australasia Conference \hfill 2023
+
+    \section{Conference presentations}
+    Selected talk at The Association of Molecular Modellers of Australasia Conference \hfill 2025\\
+    Selected talk at QUIBIC Symposium \hfill 2025\\
+    Selected talk at the Annual Conference of the Australian Society for Biophysics \hfill 2023
+\end{document}
